@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Ava Melody",
+    "category": ["Singer", "Dancer"],
+    "priceRange": "₹50,000 - ₹1,00,000",
+    "location": "Mumbai",
+    "bio": "Versatile performer with 5 years of experience.",
+    "languages": ["English", "Hindi"],
+    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=150"
+  },
+  {
+    "id": 2,
+    "name": "Rohan Beats",
+    "category": ["DJ"],
+    "priceRange": "₹30,000 - ₹80,000",
+    "location": "Delhi",
+    "bio": "High-energy DJ for all events.",
+    "languages": ["English"],
+    "image": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=150"
+  },
+  {
+    "id": 3,
+    "name": "Priya Speaker",
+    "category": ["Speaker"],
+    "priceRange": "₹20,000 - ₹50,000",
+    "location": "Bangalore",
+    "bio": "Motivational speaker and storyteller.",
+    "languages": ["English", "Kannada"],
+    "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=150"
+  }
+]
