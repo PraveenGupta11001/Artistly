@@ -1,6 +1,5 @@
 "use client";
 
-// Artist Onboarding page with responsive form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -9,15 +8,15 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useContext } from 'react';
+import { ArtistContext } from '@/app/context/ ArtistContext';
 
-// Form validation schema
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
   bio: yup.string().required('Bio is required'),
   category: yup.array().min(1, 'Select at least one category').required(),
   languages: yup.array().min(1, 'Select at least one language').required(),
-  feeRange: yup.string().required('Fee range is required'),
+  priceRange: yup.string().required('Price range is required'),
   location: yup.string().required('Location is required'),
 });
 
@@ -26,15 +25,36 @@ interface FormData {
   bio: string;
   category: string[];
   languages: string[];
-  feeRange: string;
+  priceRange: string;
   location: string;
 }
 
-export default function ArtistOnboarding() {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+function ArtistList() {
+  const { artists } = useContext(ArtistContext);
 
-  // Form setup with React Hook Form
+  return (
+    <div className="mt-8">
+      <h2 className="text-2xl font-bold mb-4">All Artists</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {artists.map((artist) => (
+          <div key={artist.id} className="border p-4 rounded shadow">
+            <img src={artist.image} alt={artist.name} className="w-24 h-24 object-cover rounded mb-2" />
+            <h3 className="text-lg font-semibold">{artist.name}</h3>
+            <p className="text-sm">Category: {artist.category.join(', ')}</p>
+            <p className="text-sm">Fee Range: {artist.priceRange}</p>
+            <p className="text-sm">Location: {artist.location}</p>
+            <p className="text-sm">Bio: {artist.bio}</p>
+            <p className="text-sm">Languages: {artist.languages.join(', ')}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function ArtistOnboarding() {
+  const { addArtist } = useContext(ArtistContext);
+
   const {
     register,
     handleSubmit,
@@ -43,24 +63,25 @@ export default function ArtistOnboarding() {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
+      name: '',
+      bio: '',
       category: [],
       languages: [],
+      priceRange: '',
+      location: '',
     },
   });
 
-  // Form submission handler
   const onSubmit = (data: FormData) => {
+    addArtist(data);
     console.log('Form submitted:', data);
-    // Simulate API call
     alert('Artist onboarded successfully!');
   };
 
-  // Filter options
   const categories = ['Singer', 'Dancer', 'Speaker', 'DJ'];
   const languages = ['English', 'Hindi', 'Kannada'];
-  const feeRanges = ['₹20,000 - ₹50,000', '₹30,000 - ₹80,000', '₹50,000 - ₹1,00,000'];
+  const priceRanges = ['₹20,000 - ₹50,000', '₹30,000 - ₹80,000', '₹50,000 - ₹1,00,000'];
 
-  // Animation variants for page
   const variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -75,9 +96,7 @@ export default function ArtistOnboarding() {
       className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-lg sm:max-w-2xl"
     >
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Onboard Artist</h1>
-      {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
-        {/* Name field */}
         <div>
           <label htmlFor="name" className="block mb-1 text-sm sm:text-base">
             Name
@@ -85,7 +104,6 @@ export default function ArtistOnboarding() {
           <Input id="name" {...register('name')} />
           {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
         </div>
-        {/* Bio field */}
         <div>
           <label htmlFor="bio" className="block mb-1 text-sm sm:text-base">
             Bio
@@ -93,7 +111,6 @@ export default function ArtistOnboarding() {
           <Input id="bio" {...register('bio')} />
           {errors.bio && <p className="text-red-500 text-sm">{errors.bio.message}</p>}
         </div>
-        {/* Category multi-select */}
         <div>
           <label className="block mb-1 text-sm sm:text-base">Category</label>
           <Controller
@@ -105,12 +122,11 @@ export default function ArtistOnboarding() {
                   <div key={cat} className="flex items-center">
                     <Checkbox
                       id={`category-${cat}`}
-                      checked={selectedCategories.includes(cat)}
+                      checked={field.value.includes(cat)}
                       onCheckedChange={(checked) => {
                         const newCategories = checked
-                          ? [...selectedCategories, cat]
-                          : selectedCategories.filter((c) => c !== cat);
-                        setSelectedCategories(newCategories);
+                          ? [...field.value, cat]
+                          : field.value.filter((c: string) => c !== cat);
                         field.onChange(newCategories);
                       }}
                     />
@@ -124,7 +140,6 @@ export default function ArtistOnboarding() {
           />
           {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
         </div>
-        {/* Languages multi-select */}
         <div>
           <label className="block mb-1 text-sm sm:text-base">Languages</label>
           <Controller
@@ -136,12 +151,11 @@ export default function ArtistOnboarding() {
                   <div key={lang} className="flex items-center">
                     <Checkbox
                       id={`language-${lang}`}
-                      checked={selectedLanguages.includes(lang)}
+                      checked={field.value.includes(lang)}
                       onCheckedChange={(checked) => {
                         const newLanguages = checked
-                          ? [...selectedLanguages, lang]
-                          : selectedLanguages.filter((l) => l !== lang);
-                        setSelectedLanguages(newLanguages);
+                          ? [...field.value, lang]
+                          : field.value.filter((l: string) => l !== lang);
                         field.onChange(newLanguages);
                       }}
                     />
@@ -155,19 +169,18 @@ export default function ArtistOnboarding() {
           />
           {errors.languages && <p className="text-red-500 text-sm">{errors.languages.message}</p>}
         </div>
-        {/* Fee range dropdown */}
         <div>
-          <label className="block mb-1 text-sm sm:text-base">Fee Range</label>
+          <label className="block mb-1 text-sm sm:text-base">Price Range</label>
           <Controller
-            name="feeRange"
+            name="priceRange"
             control={control}
             render={({ field }) => (
               <Select onValueChange={field.onChange} value={field.value}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select fee range" />
+                  <SelectValue placeholder="Select price range" />
                 </SelectTrigger>
                 <SelectContent>
-                  {feeRanges.map((fee) => (
+                  {priceRanges.map((fee) => (
                     <SelectItem key={fee} value={fee}>
                       {fee}
                     </SelectItem>
@@ -176,9 +189,8 @@ export default function ArtistOnboarding() {
               </Select>
             )}
           />
-          {errors.feeRange && <p className="text-red-500 text-sm">{errors.feeRange.message}</p>}
+          {errors.priceRange && <p className="text-red-500 text-sm">{errors.priceRange.message}</p>}
         </div>
-        {/* Location field */}
         <div>
           <label htmlFor="location" className="block mb-1 text-sm sm:text-base">
             Location
@@ -190,6 +202,7 @@ export default function ArtistOnboarding() {
           Submit
         </Button>
       </form>
+      <ArtistList />
     </motion.div>
   );
 }

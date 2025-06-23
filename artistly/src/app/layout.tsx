@@ -1,14 +1,13 @@
-// Root layout for the entire application
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ThemeProvider } from '@/app/context/ThemeContext';
+import { ArtistProvider } from '@/app/context/ ArtistContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// SEO metadata for search engine optimization
 export const metadata: Metadata = {
   title: 'Artistly - Performing Artist Booking Platform',
   description: 'Connect event planners with talented artists for unforgettable events.',
@@ -29,11 +28,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning>
-        {/* Theme provider for light/dark mode */}
         <ThemeProvider>
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          <ArtistProvider>
+            <Header />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </ArtistProvider>
         </ThemeProvider>
       </body>
     </html>

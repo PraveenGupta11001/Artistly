@@ -1,7 +1,7 @@
 "use client";
 
-// Manager Dashboard with responsive table
-import artistsData from '@/app/data/artists.json';
+import { useContext } from 'react';
+import { ArtistContext } from '@/app/context/ ArtistContext';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
@@ -12,10 +12,14 @@ interface Artist {
   category: string[];
   priceRange: string;
   location: string;
+  bio: string;
+  languages: string[];
+  image: string;
 }
 
 export default function ManagerDashboard() {
-  // Animation variants for page
+  const { artists } = useContext(ArtistContext);
+
   const variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -30,7 +34,6 @@ export default function ManagerDashboard() {
       className="container mx-auto p-4 sm:p-6 lg:p-8"
     >
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Manager Dashboard</h1>
-      {/* Responsive table */}
       <div className="rounded-md border bg-white dark:bg-gray-800">
         <Table>
           <TableHeader>
@@ -43,7 +46,7 @@ export default function ManagerDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {artistsData.map((artist: Artist) => (
+            {artists.map((artist: Artist) => (
               <TableRow key={artist.id}>
                 <TableCell>{artist.name}</TableCell>
                 <TableCell className="hidden sm:table-cell">
