@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button } from '@/components/ui/button';
@@ -32,29 +32,6 @@ interface FormData {
   imageUrl?: string;
 }
 
-function ArtistList() {
-  const { artists } = useContext(ArtistContext);
-
-  return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-bold mb-4">All Artists</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {artists.map((artist) => (
-          <div key={artist.id} className="border p-4 rounded shadow">
-            <img src={artist.image} alt={artist.name} className="w-24 h-24 object-cover rounded mb-2" />
-            <h3 className="text-lg font-semibold">{artist.name}</h3>
-            <p className="text-sm">Category: {artist.category.join(', ')}</p>
-            <p className="text-sm">Fee Range: {artist.priceRange}</p>
-            <p className="text-sm">Location: {artist.location}</p>
-            <p className="text-sm">Bio: {artist.bio}</p>
-            <p className="text-sm">Languages: {artist.languages.join(', ')}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function ArtistOnboarding() {
   const { addArtist } = useContext(ArtistContext);
 
@@ -64,7 +41,7 @@ export default function ArtistOnboarding() {
     control,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as Resolver<FormData>,
     defaultValues: {
       name: '',
       bio: '',
@@ -192,7 +169,11 @@ export default function ArtistOnboarding() {
                 </SelectTrigger>
                 <SelectContent>
                   {priceRanges.map((fee) => (
-                    <SelectItem key={fee} value={fee}>
+                    <SelectItem
+                      className="bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-700 rounded-md mx-1 my-0.5 px-3 py-1.5 transition-colors duration-150 hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      key={fee}
+                      value={fee}
+                    >
                       {fee}
                     </SelectItem>
                   ))}
@@ -213,7 +194,6 @@ export default function ArtistOnboarding() {
           Submit
         </Button>
       </form>
-      {/* <ArtistList /> */}
     </motion.div>
   );
 }
