@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useContext } from 'react';
-import { ArtistContext } from '@/app/context/ ArtistContext';
+import { ArtistContext } from '@/app/context/ArtistContext';
 import ArtistCard from '@/components/ArtistCard';
 import FilterBar from '@/components/FilterBar';
 import { motion } from 'framer-motion';

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode } from 'react';
 import artistsData from '@/app/data/artists.json';
 
 interface Artist {
@@ -16,7 +16,7 @@ interface Artist {
 
 interface ArtistContextType {
   artists: Artist[];
-  addArtist: (artist: Omit<Artist, 'id' | 'image'>) => void;
+  addArtist: (artist: Omit<Artist, 'id' | 'image'> & { imageUrl?: string }) => void;
 }
 
 export const ArtistContext = createContext<ArtistContextType>({
@@ -27,11 +27,11 @@ export const ArtistContext = createContext<ArtistContextType>({
 export const ArtistProvider = ({ children }: { children: ReactNode }) => {
   const [artists, setArtists] = useState<Artist[]>(artistsData);
 
-  const addArtist = (artist: Omit<Artist, 'id' | 'image'>) => {
+  const addArtist = (artist: Omit<Artist, 'id' | 'image'> & { imageUrl?: string }) => {
     const newArtist: Artist = {
       ...artist,
       id: artists.length + 1,
-      image: '/file.svg',
+      image: artist.imageUrl && artist.imageUrl.trim() ? artist.imageUrl : '/file.svg',
     };
     setArtists([...artists, newArtist]);
   };

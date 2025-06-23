@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
 import { useContext } from 'react';
-import { ArtistContext } from '@/app/context/ ArtistContext';
+import { ArtistContext } from '@/app/context/ArtistContext';
 
+// Form validation schema
 const schema = yup.object().shape({
   name: yup.string().required('Name is required'),
   bio: yup.string().required('Bio is required'),
@@ -18,6 +19,7 @@ const schema = yup.object().shape({
   languages: yup.array().min(1, 'Select at least one language').required(),
   priceRange: yup.string().required('Price range is required'),
   location: yup.string().required('Location is required'),
+  imageUrl: yup.string().url('Must be a valid URL').notRequired(),
 });
 
 interface FormData {
@@ -27,6 +29,7 @@ interface FormData {
   languages: string[];
   priceRange: string;
   location: string;
+  imageUrl?: string;
 }
 
 function ArtistList() {
@@ -69,6 +72,7 @@ export default function ArtistOnboarding() {
       languages: [],
       priceRange: '',
       location: '',
+      imageUrl: '',
     },
   });
 
@@ -110,6 +114,13 @@ export default function ArtistOnboarding() {
           </label>
           <Input id="bio" {...register('bio')} />
           {errors.bio && <p className="text-red-500 text-sm">{errors.bio.message}</p>}
+        </div>
+        <div>
+          <label htmlFor="imageUrl" className="block mb-1 text-sm sm:text-base">
+            Image URL (Optional)
+          </label>
+          <Input id="imageUrl" {...register('imageUrl')} placeholder="e.g., https://example.com/image.jpg" />
+          {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl.message}</p>}
         </div>
         <div>
           <label className="block mb-1 text-sm sm:text-base">Category</label>
@@ -202,7 +213,7 @@ export default function ArtistOnboarding() {
           Submit
         </Button>
       </form>
-      <ArtistList />
+      {/* <ArtistList /> */}
     </motion.div>
   );
 }

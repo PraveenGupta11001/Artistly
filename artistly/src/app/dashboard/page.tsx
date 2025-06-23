@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from 'react';
-import { ArtistContext } from '@/app/context/ ArtistContext';
+import { ArtistContext } from '@/app/context/ArtistContext';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
