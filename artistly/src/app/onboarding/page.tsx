@@ -209,7 +209,7 @@ export default function ArtistOnboarding() {
           <Input id="location" {...register('location')} />
           {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
         </div>
-        <Button type="submit" className="w-full sm:w-auto">
+        <Button type="submit" className="w-full sm:w-auto bg-gray-700 text-white hover:bg-gray-800 transition-colors duration-200">
           Submit
         </Button>
       </form>
