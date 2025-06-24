@@ -4,8 +4,9 @@
 ├── next-env.d.ts
 ├── package.json
 ├── package-lock.json
-├── postcss.config.mjs
+├── postcss.config.js
 ├── public
+│   ├── favicon.png
 │   ├── file.svg
 │   ├── globe.svg
 │   ├── next.svg
@@ -35,4 +36,4 @@
 ├── tailwind.config.js
 └── tsconfig.json
 
-11 directories, 24 files
+11 directories, 25 files

@@ -1,9 +1,9 @@
 "use client";
 
-// Reusable, responsive ArtistCard component
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface Artist {
   id: number;
@@ -29,14 +29,19 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
           <img
             src={artist.image}
             alt={`Profile of ${artist.name}`}
-            className="w-full h-32 sm:h-40 object-cover mb-2 rounded"
+            className="w-full h-32 sm:h-40 object-cover mb-3 rounded-md"
           />
-          <p className="text-sm sm:text-base">Category: {artist.category.join(', ')}</p>
-          <p className="text-sm sm:text-base">Location: {artist.location}</p>
-          <p className="text-sm sm:text-base">Price: {artist.priceRange}</p>
+          <p className="text-sm sm:text-base mb-2">Category: {artist.category.join(', ')}</p>
+          <p className="text-sm sm:text-base mb-2">Location: {artist.location}</p>
+          <p className="text-sm sm:text-base">Price Range: {artist.priceRange}</p>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Ask for Quote</Button>
+          <Button asChild className="w-full">
+            <Link href={`/artists/${artist.id}`}
+            className=" bg-gray-700 text-center text-white hover:bg-gray-800 transition-colors duration-200"
+            >
+              View Profile</Link>
+          </Button>
         </CardFooter>
       </Card>
     </motion.div>

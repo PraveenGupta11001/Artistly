@@ -5,6 +5,7 @@ import { ArtistContext } from '@/app/context/ArtistContext';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 interface Artist {
   id: number;
@@ -38,6 +39,7 @@ export default function ManagerDashboard() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[60px]">S.No</TableHead>
               <TableHead>Name</TableHead>
               <TableHead className="hidden sm:table-cell">Category</TableHead>
               <TableHead className="hidden md:table-cell">City</TableHead>
@@ -46,8 +48,9 @@ export default function ManagerDashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {artists.map((artist: Artist) => (
+            {artists.map((artist: Artist, index: number) => (
               <TableRow key={artist.id}>
+                <TableCell className='text-center font-semibold'>{index + 1}</TableCell>
                 <TableCell>{artist.name}</TableCell>
                 <TableCell className="hidden sm:table-cell">
                   {artist.category.join(', ')}
@@ -55,8 +58,13 @@ export default function ManagerDashboard() {
                 <TableCell className="hidden md:table-cell">{artist.location}</TableCell>
                 <TableCell>{artist.priceRange}</TableCell>
                 <TableCell>
-                  <Button variant="outline" size="sm">
-                    View
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="bg-gray-700 text-center text-white hover:bg-gray-800 transition-colors duration-200"
+                  >
+                    <Link href={`/artists/${artist.id}`}>View</Link>
                   </Button>
                 </TableCell>
               </TableRow>
