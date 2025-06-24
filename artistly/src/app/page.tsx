@@ -43,7 +43,9 @@ export default function Home() {
           Connect with top performing artists for your events.
         </p>
         <Link href="/artists">
-          <Button size="lg">Explore Artists</Button>
+          <Button size="lg"
+          className="w-full sm:w-auto bg-gray-700 text-white hover:bg-gray-800 transition-colors duration-200">
+            Explore Artists</Button>
         </Link>
       </section>
       {/* Category cards */}

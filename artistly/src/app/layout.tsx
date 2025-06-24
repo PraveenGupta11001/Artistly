@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Artistly',
     description: 'Book top performing artists for your events.',
-    url: 'https://artistly.vercel.app',
+    url: 'https://artistly-silk.vercel.app',
     type: 'website',
   },
 };
@@ -27,6 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+      </head> */}
       <body className={inter.className} suppressHydrationWarning>
         <ThemeProvider>
           <ArtistProvider>

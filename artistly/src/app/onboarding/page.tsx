@@ -10,6 +10,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { motion } from 'framer-motion';
 import { useContext } from 'react';
 import { ArtistContext } from '@/app/context/ArtistContext';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Form validation schema
 const schema = yup.object().shape({
@@ -33,12 +35,13 @@ interface FormData {
 }
 
 export default function ArtistOnboarding() {
-  const { addArtist } = useContext(ArtistContext);
+  const { addArtist, artists } = useContext(ArtistContext);
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema) as Resolver<FormData>,
@@ -54,9 +57,27 @@ export default function ArtistOnboarding() {
   });
 
   const onSubmit = (data: FormData) => {
+    const isDuplicate = artists.some(
+      (artist) => artist.name.toLowerCase() === data.name.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      toast.error('An artist with this name already exists!', {
+        position: 'top-right',
+        autoClose: 3000,
+        transition: Slide,
+      });
+      return;
+    }
+
     addArtist(data);
     console.log('Form submitted:', data);
-    alert('Artist onboarded successfully!');
+    toast.success('Artist onboarded successfully!', {
+      position: 'top-right',
+      autoClose: 3000,
+      transition: Slide,
+    });
+    reset();
   };
 
   const categories = ['Singer', 'Dancer', 'Speaker', 'DJ'];
@@ -76,6 +97,7 @@ export default function ArtistOnboarding() {
       transition={{ duration: 0.5 }}
       className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-lg sm:max-w-2xl"
     >
+      <ToastContainer position="top-right" autoClose={3000} transition={Slide} />
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">Onboard Artist</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
         <div>
@@ -96,7 +118,7 @@ export default function ArtistOnboarding() {
           <label htmlFor="imageUrl" className="block mb-1 text-sm sm:text-base">
             Image URL (Optional)
           </label>
-          <Input id="imageUrl" {...register('imageUrl')} placeholder="e.g., https://example.com/image.jpg" />
+          <Input id="imageUrl" placeholder="e.g., https://example.com/image.jpg" {...register('imageUrl')} />
           {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl.message}</p>}
         </div>
         <div>
